@@ -11,6 +11,9 @@
       "standard"
     ]
   },
+  "standard": {
+    "env": ["jest"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/giovane-aG/clean-node-api.git"
