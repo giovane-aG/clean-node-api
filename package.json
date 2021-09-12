@@ -4,15 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll",
+    "test:staged": "jest"
   },
   "lint-staged": {
     "*.js": [
-      "standard"
+      "standard --fix",
+      "git add"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "repository": {
     "type": "git",
