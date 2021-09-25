@@ -1,4 +1,4 @@
-const { serverError, badRequest } = require('../helpers/http-response')
+const { serverError, badRequest, unauthorizedError } = require('../helpers/http-response')
 
 class LoginRouter {
   constructor (authUseCase) {
@@ -22,9 +22,7 @@ class LoginRouter {
 
     this.authUseCase.auth(email, password)
 
-    return {
-      statusCode: 401
-    }
+    return unauthorizedError()
   }
 }
 
