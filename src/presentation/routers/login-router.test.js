@@ -1,10 +1,20 @@
 const LoginRouter = require('./login-router')
 const MissingParamError = require('../helpers/missing-param-error')
 const UnauthorizedError = require('../helpers/unauthorized-error')
-
-// const HttpResponse = require('../helpers/http-response')
+const ServerError = require('../helpers/server-error')
 
 const makeSut = () => {
+  const authUseCaseSpy = makeAuthUseCase()
+  authUseCaseSpy.accesToken = 'valid_token'
+  const sut = new LoginRouter(authUseCaseSpy)
+
+  return {
+    sut,
+    authUseCaseSpy
+  }
+}
+
+const makeAuthUseCase = () => {
   class AuthUseCaseSpySpy {
     auth (email, password) {
       this.email = email
@@ -13,14 +23,17 @@ const makeSut = () => {
     }
   }
 
-  const authUseCaseSpy = new AuthUseCaseSpySpy()
-  authUseCaseSpy.accesToken = 'valid_token'
-  const sut = new LoginRouter(authUseCaseSpy)
+  return new AuthUseCaseSpySpy()
+}
 
-  return {
-    sut,
-    authUseCaseSpy
+const makeAuthUseCaseWithError = () => {
+  class AuthUseCaseSpySpy {
+    auth (email, password) {
+      throw new Error()
+    }
   }
+
+  return new AuthUseCaseSpySpy()
 }
 
 describe('Login Router', () => {
@@ -60,6 +73,7 @@ describe('Login Router', () => {
     const httpRequest = {}
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should call AuthUseCaseSpy with correct params', () => {
@@ -120,6 +134,7 @@ describe('Login Router', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should return 500 if AuthUseCase has no auth method', () => {
@@ -133,5 +148,22 @@ describe('Login Router', () => {
 
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 500 if AuthUseCase throws', () => {
+    const authUseCaseSpy = makeAuthUseCaseWithError()
+    const sut = new LoginRouter(authUseCaseSpy)
+
+    const httpRequest = {
+      body: {
+        email: 'any@email.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })

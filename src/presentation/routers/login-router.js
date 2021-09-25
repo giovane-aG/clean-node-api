@@ -10,23 +10,20 @@ class LoginRouter {
       return serverError()
     }
 
-    const { email, password } = httpRequest.body
+    try {
+      const { email, password } = httpRequest.body
 
-    if (!email) {
-      return badRequest('email')
+      if (!email) return badRequest('email')
+      if (!password) return badRequest('password')
+
+      const token = this.authUseCase.auth(email, password)
+
+      if (!token) return unauthorizedError()
+
+      return ok(token)
+    } catch (error) {
+      return serverError()
     }
-
-    if (!password) {
-      return badRequest('password')
-    }
-
-    const token = this.authUseCase.auth(email, password)
-
-    if (!token) {
-      return unauthorizedError()
-    }
-
-    return ok(token)
   }
 }
 
