@@ -26,7 +26,7 @@ class LoginRouter {
       return unauthorizedError()
     }
 
-    return ok()
+    return ok(token)
   }
 }
 
