@@ -1,6 +1,5 @@
 const UnauthorizedError = require('./unauthorized-error')
 const ServerError = require('./server-error')
-const BadParamError = require('./bad-param-error')
 
 class HttpResponse {
   static badRequest (error) {
@@ -28,13 +27,6 @@ class HttpResponse {
     return {
       statusCode: 200,
       body: data
-    }
-  }
-
-  static badParamError () {
-    return {
-      statusCode: 400,
-      body: new BadParamError()
     }
   }
 }
