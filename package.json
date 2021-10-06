@@ -4,15 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll"
-  },
-  "lint-staged": {
-    "*.js": [
-      "standard"
-    ]
+    "test": "jest --watchAll",
+    "test:staged": "jest --passWithNoTests"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "repository": {
     "type": "git",
