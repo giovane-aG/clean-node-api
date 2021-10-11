@@ -3,7 +3,7 @@ const { serverError, badRequest, unauthorizedError, ok } = require('../helpers/h
 const {
   MissingParamError,
   InvalidParamError
-} = require('../helpers/errors')
+} = require('../../utils/errors')
 
 class LoginRouter {
   constructor (authUseCase, emailValidator) {
