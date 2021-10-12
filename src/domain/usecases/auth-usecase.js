@@ -18,7 +18,8 @@ class AuthUseCase {
 
     if (!user) return null
 
-    await this.encrypterSpy.compare(password, user.password)
+    const validPassword = await this.encrypterSpy.compare(password, user.password)
+    if (!validPassword) return null
 
     return user
   }
