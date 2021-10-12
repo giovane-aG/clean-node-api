@@ -15,6 +15,17 @@ const makeEncrypter = () => {
   return encrypterSpy
 }
 
+const makeEncrypterWithError = () => {
+  class EncrypterSpy {
+    async compare (password, hashedPassword) {
+      throw new Error()
+    }
+  }
+
+  const encrypterSpy = new EncrypterSpy()
+  return encrypterSpy
+}
+
 const makeTokenGenerator = () => {
   class TokenGeneratorSpy {
     async generate (userId) {
@@ -25,6 +36,17 @@ const makeTokenGenerator = () => {
 
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   tokenGeneratorSpy.accessToken = 'any_token'
+  return tokenGeneratorSpy
+}
+
+const makeTokenGeneratorWithError = () => {
+  class TokenGeneratorSpy {
+    async generate (userId) {
+      throw new Error()
+    }
+  }
+
+  const tokenGeneratorSpy = new TokenGeneratorSpy()
   return tokenGeneratorSpy
 }
 
@@ -42,6 +64,16 @@ const makeLoadUserByEmailRepository = () => {
     password: 'hashed_password'
   }
 
+  return loadUserByEmailRepositorySpy
+}
+const makeLoadUserByEmailRepositoryWithError = () => {
+  class LoadUserByEmailRepositorySpy {
+    async load (email) {
+      throw new Error()
+    }
+  }
+
+  const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
   return loadUserByEmailRepositorySpy
 }
 
@@ -165,6 +197,29 @@ describe('Auth UseCase', () => {
         loadUserByEmailRepository,
         encrypter,
         tokenGenerator: invalid
+      })
+    ]
+
+    for (const sut of suts) {
+      const promise = sut.auth('any_email@email.com', 'any_password')
+      expect(promise).rejects.toThrow()
+    }
+  })
+
+  test('Should throw if any dependencies throws', async () => {
+    const suts = [
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepositoryWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: makeEncrypterWithError()
+
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+        encrypter: makeEncrypter(),
+        tokenGenerator: makeTokenGeneratorWithError()
       })
     ]
 
