@@ -157,6 +157,13 @@ describe('Auth UseCase', () => {
     expect(accesToken).toBeTruthy()
   })
 
+  test('Should call UpdateAccessToken with correct values', async () => {
+    const { sut, loadUserByEmailRepositorySpy, tokenGeneratorSpy } = makeSut()
+
+    await sut.auth('valid_email@email.com', 'valid_password')
+    expect(tokenGeneratorSpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
+  })
+
   test('Should throw if AuthUseCase is called with no dependencies', async () => {
     // tratando um array de casos de dependências inválidas
 
