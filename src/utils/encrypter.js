@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const { MissingParamError } = require('../../utils/errors')
+const { MissingParamError } = require('./errors')
 
 class Encrypter {
   async compare (value, hash) {
