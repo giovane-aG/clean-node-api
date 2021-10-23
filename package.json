@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest  --colors --silent --noStackTrace",
+    "test": "jest  --colors  --noStackTrace",
     "test:unit": "npm test -- --watch",
-    "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage"
+    "test:staged": "npm test -- --silent --findRelatedTests",
+    "test:ci": "npm test -- --silent --coverage"
   },
   "standard": {
     "env": [
