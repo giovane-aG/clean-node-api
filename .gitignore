@@ -1,4 +1,4 @@
 node_modules
 .husky
 coverage
-globalconfig.json
+globalConfig.json
