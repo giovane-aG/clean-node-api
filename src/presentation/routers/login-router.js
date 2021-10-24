@@ -6,7 +6,7 @@ const {
 } = require('../../utils/errors')
 
 class LoginRouter {
-  constructor (authUseCase, emailValidator) {
+  constructor ({ authUseCase, emailValidator } = {}) {
     this.authUseCase = authUseCase
     this.emailValidator = emailValidator
   }
