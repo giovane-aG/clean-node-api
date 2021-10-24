@@ -5,7 +5,7 @@
   "main": "src/main/index.js",
   "scripts": {
     "start": "node src/main/index.js",
-    "test": "jest  --colors  --noStackTrace",
+    "test": "jest  --colors  --noStackTrace --runInBand",
     "test:unit": "npm test -- --watch",
     "test:staged": "npm test -- --silent --findRelatedTests",
     "test:ci": "npm test -- --silent --coverage"
