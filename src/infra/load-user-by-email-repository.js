@@ -4,9 +4,9 @@ class LoadUserByEmailRepository {
   async load (email) {
     if (!email) throw new MissingParamError('email')
 
-    const db = await MongoHelper.getDb()
+    const userModel = await MongoHelper.getCollection('users')
 
-    const user = await db.collection('users').findOne({
+    const user = await userModel.findOne({
       email
     }, {
       projection: {
